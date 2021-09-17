@@ -1,0 +1,122 @@
+# serverless.yml
+
+service: notegoatapp
+useDotenv: false
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+  - serverless-domain-manager
+custom:
+  wsgi:
+    app: main.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: non-linux
+  dev:
+    domainNameCondition: api-dev.notegoatapp.com
+  staging:
+    domainNameCondition: api-staging.notegoatapp.com
+  prod:
+    domainNameCondition: api.notegoatapp.com
+  customDomain:
+    domainName: ${self:custom.${self:provider.stage}.domainNameCondition}
+    basePath: ''
+    stage: ${self:provider.stage}
+    certificateName: 'notegoatapp.com'
+    createRoute53Record: true
+    endpointType: 'regional'
+    securityPolicy: tls_1_2
+    apiType: rest
+
+provider:
+  name: aws
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:PutObject"
+            - "s3:GetObject"
+          Resource: arn:aws:s3:::${env:AWS_BUCKET}/*
+        - Effect: "Allow"
+          Action:
+            - "ses:SendEmail"
+          Resource: arn:aws:ses:${env:AWS_REGION}:${env:AWS_ACCOUNT_ID}:identity/${env:CONTACT_EMAIL}
+  runtime: python3.8
+  timeout: 10
+  memorySize: 2048
+  stage: dev
+  region: us-west-2
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    events:
+      - http:
+          path: /
+          method: any
+          cors: true
+      - http:
+          path: /version
+          method: get
+          cors: true
+      - http:
+          path: /contact
+          method: post
+          cors: true
+      - http:
+          path: /session
+          method: get
+          cors: true
+      - http:
+          path: /session
+          method: post
+          cors: true
+      - http:
+          path: /session
+          method: delete
+          cors: true
+      - http:
+          path: /user
+          method: post
+          cors: true
+      - http:
+          path: /notebook/{notebook_id}/note
+          method: get
+          cors: true
+      - http:
+          path: /notebook/{notebook_id}/note
+          method: post
+          cors: true
+      - http:
+          path: /note/{note_id}
+          method: get
+          cors: true
+      - http:
+          path: /note/{note_id}
+          method: put
+          cors: true
+      - http:
+          path: /note/{note_id}
+          method: delete
+          cors: true
+      - http:
+          path: /notebook
+          method: get
+          cors: true
+      - http:
+          path: /notebook
+          method: post
+          cors: true
+      - http:
+          path: /notebook/{notebook_id}
+          method: get
+          cors: true
+      - http:
+          path: /notebook/{notebook_id}
+          method: put
+          cors: true
+      - http:
+          path: /notebook/{notebook_id}
+          method: delete
+          cors: true
