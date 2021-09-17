@@ -303,7 +303,6 @@ def create_note(notebook_id):
 @app.route("/note/<note_id>", methods=["PUT"])
 @jwt_required()
 def update_note(note_id):
-    print("UPDATE NOTE SANITY")
     token = get_jwt_identity()
     user = get_user_by_username(token)
     data = request.get_json(force=True)
@@ -314,7 +313,6 @@ def update_note(note_id):
     if note is None:
         return "", 404
     upload_note_to_s3(str(note.uuid), data["message"])
-    print("UPLOADED, DONE")
     return note.to_json(data["message"])
 
 
