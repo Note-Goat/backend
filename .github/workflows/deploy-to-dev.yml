@@ -16,6 +16,7 @@ jobs:
       - run: pip install pipenv
       - run: ./bin/01-deploy.sh
         env:
+          name: dev
           APP_SECRET_KEY: ${{ secrets.APP_SECRET_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
