@@ -22,6 +22,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
           CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
           JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
