@@ -6,6 +6,7 @@ on:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -15,18 +16,3 @@ jobs:
       - run: npm i -g serverless
       - run: pip install pipenv
       - run: ./bin/01-deploy.sh
-        env:
-          name: dev
-          APP_SECRET_KEY: ${{ secrets.APP_SECRET_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_BUCKET: ${{ dev.AWS_BUCKET }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          POSTGRES_DB: ${{ dev.POSTGRES_DB }}
-          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          STAGE: ${{ dev.STAGE }}
