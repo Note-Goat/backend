@@ -1,4 +1,4 @@
-name: NoteGoat CI/CD
+name: Deploy to Dev
 on:
   push:
     branches:
