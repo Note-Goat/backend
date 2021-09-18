@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm i
+      - run: npm i -g serverless
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
