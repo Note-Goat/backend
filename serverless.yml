@@ -54,7 +54,6 @@ provider:
     POSTGRES_DB: ${env:POSTGRES_DB}
     APP_SECRET_KEY: ${env:APP_SECRET_KEY}
     AWS_BUCKET: ${env:AWS_BUCKET}
-    AWS_REGION: ${env:AWS_REGION}
     AWS_ACCOUNT_ID: ${env:AWS_ACCOUNT_ID}
     JWT_SECRET_KEY: ${env:JWT_SECRET_KEY}
     STAGE: ${env:STAGE}
