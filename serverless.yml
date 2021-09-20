@@ -1,7 +1,7 @@
 # serverless.yml
 
 service: notegoatapp
-useDotenv: false
+useDotenv: true
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
