@@ -30,7 +30,8 @@ app.secret_key = os.getenv('APP_SECRET_KEY')
 
 # JWT settings
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-app.config["JWT_TOKEN_LOCATION"] = ["cookies", "headers"]
+# app.config["JWT_TOKEN_LOCATION"] = ["cookies"]  # production
+app.config["JWT_TOKEN_LOCATION"] = ["cookies", "headers"]  # non-production
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # required for development
@@ -39,7 +40,7 @@ app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
 jwt = JWTManager(app)
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 CHARSET = "UTF-8"
 
