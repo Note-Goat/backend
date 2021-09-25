@@ -30,8 +30,7 @@ app.secret_key = os.getenv('APP_SECRET_KEY')
 
 # JWT settings
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
-# app.config["JWT_TOKEN_LOCATION"] = ["cookies"]  # production
-app.config["JWT_TOKEN_LOCATION"] = ["cookies", "headers"]  # non-production
+app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # required for development
@@ -150,21 +149,6 @@ def get_note_from_s3(note_id):
         pass
 
 
-@app.after_request
-def refresh_expiring_jwts(response):
-    try:
-        exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
-        if target_timestamp > exp_timestamp:
-            access_token = create_access_token(identity=get_jwt_identity())
-            set_access_cookies(response, access_token)
-        return response
-    except (RuntimeError, KeyError):
-        # Case where there is not a valid JWT. Just return the original response
-        return response
-
-
 @app.route("/")
 def home():
     return "<p>Hello, World!</p>"
@@ -240,7 +224,7 @@ def create_session():
     data = request.get_json(force=True)
     user = get_user_by_username(data['username'])
     if verify_password(data['password'], user.password):
-        access_token = create_access_token(identity=user.username)
+        access_token = create_access_token(identity=user.username, expires_delta=timedelta(days=7))
         response = jsonify({
             "message": "success",
             "access_token": access_token,
@@ -253,7 +237,6 @@ def create_session():
 @app.route("/session", methods=["DELETE"])
 def delete_session():
     response = jsonify({"message": "logout successful"})
-    unset_jwt_cookies(response)
     return response
 
 
