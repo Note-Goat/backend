@@ -223,6 +223,8 @@ def verify_user():
 def create_session():
     data = request.get_json(force=True)
     user = get_user_by_username(data['username'])
+    if user is None:
+        return "", 400
     if verify_password(data['password'], user.password):
         access_token = create_access_token(identity=user.username, expires_delta=timedelta(days=7))
         response = jsonify({
